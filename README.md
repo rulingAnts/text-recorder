@@ -34,10 +34,27 @@ holds only:
   so each app serves its own)
 - `icons/` — the recorder's app icons (microphone)
 
+## Independent but coupled — read before changing either repo
+
+This and the editor are **two independent Git repos**, but the recorder runs the
+editor's engine, so they are coupled. Three rules keep them consistent (full
+detail for AI agents in [CLAUDE.md](CLAUDE.md)):
+
+1. **Change the engine in the editor repo, not here.** All record/consent/upload
+   logic lives in `flextext-editor`; never copy engine code into this repo.
+2. **Bump this `sw.js` `VERSION`** whenever an editor-engine change should reach
+   installed recorders — this SW precaches the editor engine *by path*, so
+   without a bump, recorders keep serving a stale cached engine offline.
+3. **Deploy the editor FIRST.** When a change spans both repos, deploy the
+   editor's `productionWeb`, confirm `/flextext-editor/` is live, *then* push
+   this repo — the recorder's SW caches whatever editor engine is live at install
+   time, so the reverse order would cache the old engine.
+
 ## Deploy
 
 GitHub Pages from the repo root → served at <https://rulingants.github.io/text-recorder/>.
-Bump `sw.js` `VERSION` on each deploy.
+Bump `sw.js` `VERSION` on each deploy. See the deploy-order rule above when the
+change also touches the editor.
 
 > ⚠️ The shell depends on the editor being deployed at `…/flextext-editor/` on the **same
 > origin**. If the editor moves or its `js/`/`css/` paths change, update the script/link
