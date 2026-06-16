@@ -1,8 +1,14 @@
 /* Service worker for the "Text Recorder" PWA. Precaches its own thin shell PLUS
  * the shared engine it loads from the Flextext Editor repo (same origin), so the
- * recorder works fully offline. Bump VERSION on every deploy. */
+ * recorder works fully offline.
+ *
+ * VERSION COUPLING — IMPORTANT: this SW caches byte copies of the editor engine
+ * (/flextext-editor/js/*.js, css/app.css). Those files have their own lifecycle
+ * in the editor repo. Bump VERSION here whenever you deploy — AND specifically
+ * whenever the editor engine changes in a way the recorder should pick up — or
+ * installed recorders keep serving a stale cached engine offline. */
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = 'text-recorder-' + VERSION;
 const SHELL = [
   './',
