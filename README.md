@@ -1,10 +1,10 @@
-# Text Recorder
+# Flextext Recorder
 
 A stripped‑down, **recording‑only** PWA for native‑speaker coworkers gathering audio
 on a phone — record → send.
 
 > **This is a companion to the [Flextext Editor](https://github.com/rulingAnts/flextext-editor),
-> which is the main project.** The Text Recorder is the *same app* running in its "record"
+> which is the main project.** The Flextext Recorder is the *same app* running in its "record"
 > mode — all the recording, consent, storage, and upload logic lives in the editor repo and
 > is maintained there, once. This repo is only a thin shell so the recorder installs as its
 > **own** home‑screen app. **For issues, contributions, and the full story, go to the

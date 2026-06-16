@@ -1,4 +1,4 @@
-/* Service worker for the "Text Recorder" PWA. Precaches its own thin shell PLUS
+/* Service worker for the "Flextext Recorder" PWA. Precaches its own thin shell PLUS
  * the shared engine it loads from the Flextext Editor repo (same origin), so the
  * recorder works fully offline.
  *
@@ -8,7 +8,7 @@
  * whenever the editor engine changes in a way the recorder should pick up — or
  * installed recorders keep serving a stale cached engine offline. */
 
-const VERSION = 'v5';
+const VERSION = 'v6';
 const CACHE = 'text-recorder-' + VERSION;
 const SHELL = [
   './',

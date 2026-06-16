@@ -1,6 +1,6 @@
-# Text Recorder — repo guide for Claude / LLMs
+# Flextext Recorder — repo guide for Claude / LLMs
 
-This repo ships the **Text Recorder** PWA (<https://rulingants.github.io/text-recorder/>):
+This repo ships the **Flextext Recorder** PWA (<https://rulingants.github.io/text-recorder/>):
 a stripped-down, **recording-only** app for native-speaker coworkers gathering
 audio on a phone (record → send). It is a **thin companion** to the **Flextext
 Editor**, which is the **main project** — a separate, independent Git repo at
