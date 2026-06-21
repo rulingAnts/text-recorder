@@ -8,7 +8,7 @@
  * whenever the editor engine changes in a way the recorder should pick up — or
  * installed recorders keep serving a stale cached engine offline. */
 
-const VERSION = 'v7';
+const VERSION = 'v8';
 const CACHE = 'text-recorder-' + VERSION;
 const SHELL = [
   './',
@@ -28,8 +28,13 @@ const SHELL = [
   '/flextext-editor/js/convert.js',
   '/flextext-editor/js/zip.js',
   '/flextext-editor/js/upload.js',
+  '/flextext-editor/js/record-pcm.js',
+  '/flextext-editor/js/audio-capture-worklet.js',
+  '/flextext-editor/js/flac.js',
   '/flextext-editor/js/vendor/wavesurfer.esm.js',
   '/flextext-editor/js/vendor/lame.min.js',
+  '/flextext-editor/js/vendor/libflac.min.wasm.js',
+  '/flextext-editor/js/vendor/libflac.min.wasm.wasm',
 ];
 
 self.addEventListener('install', (e) => {
