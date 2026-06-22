@@ -41,6 +41,18 @@ sibling path `/text-recorder/`. A separate repo keeps the editor at
 `VERSION` in `sw.js` here** — otherwise installed recorders keep serving a
 **stale cached engine** offline.
 
+### ⚠ Also keep the SHELL precache list in sync with `app.js`'s import graph
+Bumping `VERSION` is **not enough on its own**. The editor's `js/app.js` is loaded
+here as a `type="module"`, so the browser resolves **every static `import` at the
+top of `app.js` at load time — even in record mode** (the record UI doesn't *use*
+the researcher panel, but the module graph still pulls it in). So whenever
+`app.js` gains/loses a top-level `import`, the `SHELL` array in `sw.js` must be
+updated to match, or a recorder that updates then goes **offline mid-load** throws
+on the missing import and is **dead offline**. As of editor v67 the graph includes
+the connectivity engine: `js/crypto.js`, `js/sync.js`, `js/researcher.js`,
+`js/researcher-panel.js` — all are in `SHELL` (recorder sw `v19`). If you add a new
+top-level module to `app.js`, add it here too.
+
 ## ⚠ DEPLOY ORDER — editor first, always
 
 GitHub Pages serves this repo's root at <https://rulingants.github.io/text-recorder/>.
