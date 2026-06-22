@@ -8,7 +8,7 @@
  * whenever the editor engine changes in a way the recorder should pick up — or
  * installed recorders keep serving a stale cached engine offline. */
 
-const VERSION = 'v18';
+const VERSION = 'v19';
 const CACHE = 'text-recorder-' + VERSION;
 const SHELL = [
   './',
@@ -31,6 +31,13 @@ const SHELL = [
   '/flextext-editor/js/record-pcm.js',
   '/flextext-editor/js/audio-capture-worklet.js',
   '/flextext-editor/js/flac.js',
+  // app.js now STATICALLY imports the connectivity engine (top-level imports), so the
+  // browser resolves these at module-load even in record mode — precache them or a
+  // recorder that updates then goes offline mid-load throws on the missing imports.
+  '/flextext-editor/js/crypto.js',
+  '/flextext-editor/js/sync.js',
+  '/flextext-editor/js/researcher.js',
+  '/flextext-editor/js/researcher-panel.js',
   '/flextext-editor/js/vendor/wavesurfer.esm.js',
   '/flextext-editor/js/vendor/lame.min.js',
   '/flextext-editor/js/vendor/libflac.min.wasm.js',
