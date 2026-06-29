@@ -8,7 +8,7 @@
  * whenever the editor engine changes in a way the recorder should pick up — or
  * installed recorders keep serving a stale cached engine offline. */
 
-const VERSION = 'v32';
+const VERSION = 'v33';
 const CACHE = 'text-recorder-' + VERSION;
 const SHELL = [
   './',
@@ -66,8 +66,10 @@ self.addEventListener('install', (e) => {
 });
 
 function cleanupOldCaches() {
-  return caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))));
+  // Scope to THIS app's OWN caches only ('text-recorder-*'). Three PWAs share one origin/CacheStorage, so
+  // an unscoped `k !== CACHE` would delete the editor's + researcher's complete caches and brick them offline.
+  return caches.keys().then(keys => Promise.all(
+    keys.filter(k => k !== CACHE && k.startsWith('text-recorder-')).map(k => caches.delete(k))));
 }
 
 self.addEventListener('message', (e) => {
