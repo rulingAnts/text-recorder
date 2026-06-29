@@ -8,7 +8,7 @@
  * whenever the editor engine changes in a way the recorder should pick up — or
  * installed recorders keep serving a stale cached engine offline. */
 
-const VERSION = 'v36';
+const VERSION = 'v37';
 const CACHE = 'text-recorder-' + VERSION;
 const SHELL = [
   './',
@@ -85,19 +85,20 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
+  // Match ONLY this app's OWN cache (NOT the global caches.match). Three PWAs share one origin and ALL
+  // precache the editor engine by path, so a global match can serve a SIBLING app's STALE copy of a shared
+  // file (the "Utilities vanished in Firefox until hard reload" bug). Own-cache match keeps this recorder
+  // on its own precached, version-consistent engine.
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: e.request.mode === 'navigate' }).then(hit => {
+    caches.open(CACHE).then(c => c.match(e.request, { ignoreSearch: e.request.mode === 'navigate' }).then(hit => {
       if (hit) return hit;
       if (e.request.mode === 'navigate') {
-        return caches.match('index.html').then(shell => shell || fetch(e.request));
+        return c.match('index.html').then(shell => shell || fetch(e.request));
       }
       return fetch(e.request).then(resp => {
-        if (resp.ok) {
-          const copy = resp.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
-        }
+        if (resp.ok) { const copy = resp.clone(); c.put(e.request, copy); }
         return resp;
       });
-    })
+    }))
   );
 });
