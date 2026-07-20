@@ -39,7 +39,9 @@ sibling path `/text-recorder/`. A separate repo keeps the editor at
 `css/app.css`). Those files have their own lifecycle in the editor repo.
 **Whenever the editor engine changes in a way this recorder should pick up, bump
 `VERSION` in `sw.js` here** — otherwise installed recorders keep serving a
-**stale cached engine** offline.
+**stale cached engine** offline. In practice the cadence is simply **every editor
+engine deploy → recorder `sw.js` bump**: the two versions have marched together
+(editor engine/sw v97+ ↔ recorder sw v46+, all silently auto-updating).
 
 ### ⚠ Also keep the SHELL precache list in sync with `app.js`'s import graph
 Bumping `VERSION` is **not enough on its own**. The editor's `js/app.js` is loaded
@@ -48,10 +50,19 @@ top of `app.js` at load time — even in record mode** (the record UI doesn't *u
 the researcher panel, but the module graph still pulls it in). So whenever
 `app.js` gains/loses a top-level `import`, the `SHELL` array in `sw.js` must be
 updated to match, or a recorder that updates then goes **offline mid-load** throws
-on the missing import and is **dead offline**. As of editor v67 the graph includes
-the connectivity engine: `js/crypto.js`, `js/sync.js`, `js/researcher.js`,
-`js/researcher-panel.js` — all are in `SHELL` (recorder sw `v19`). If you add a new
-top-level module to `app.js`, add it here too.
+on the missing import and is **dead offline**. The graph currently spans the
+recording stack (`record-pcm.js`, `audio-capture-worklet.js`, `flac.js`, the
+`vendor/` codecs) and the connectivity engine (`crypto.js`, `sync.js`,
+`researcher.js`, `researcher-panel.js`) — all are in `SHELL`. If `app.js` gains or
+loses a top-level module, mirror it in `SHELL` here in the same change.
+
+### ⚠ Consent modal markup — stamped in THREE shells, KEEP IN SYNC
+The consent modal (`#consent-modal`: recorded-response → typed signature → yes/no
+**radio** choices, one submit) is static markup stamped **identically** into all
+three shells that record: the editor's `index.html`, this repo's `index.html`, and
+the **crowd recorder's** (`/Users/Seth/GIT/crowd-recorder/index.html`). The shared
+engine only wires behavior onto that markup — if it changes in one shell it must
+change in **all three**, or the engine's selectors silently miss.
 
 ## ⚠ DEPLOY ORDER — editor first, always
 

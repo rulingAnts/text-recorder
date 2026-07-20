@@ -8,7 +8,7 @@
  * whenever the editor engine changes in a way the recorder should pick up — or
  * installed recorders keep serving a stale cached engine offline. */
 
-const VERSION = 'v56';
+const VERSION = 'v57';
 const CACHE = 'text-recorder-' + VERSION;
 const SHELL = [
   './',
@@ -28,6 +28,10 @@ const SHELL = [
   '/flextext-editor/js/convert.js',
   '/flextext-editor/js/zip.js',
   '/flextext-editor/js/upload.js',
+  // native-audio.js is a TOP-LEVEL import of app.js (the Android native bridge; inert in a
+  // browser). It MUST be precached or this app is dead offline — a missing static import
+  // stops the whole module graph from loading.
+  '/flextext-editor/js/native-audio.js',
   '/flextext-editor/js/record-pcm.js',
   '/flextext-editor/js/audio-capture-worklet.js',
   '/flextext-editor/js/flac.js',

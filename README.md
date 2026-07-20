@@ -49,6 +49,11 @@ detail for AI agents in [CLAUDE.md](CLAUDE.md)):
    editor's `productionWeb`, confirm `/flextext-editor/` is live, *then* push
    this repo — the recorder's SW caches whatever editor engine is live at install
    time, so the reverse order would cache the old engine.
+4. **The consent modal markup is stamped in three shells.** The consent dialog in
+   `index.html` here is kept identical to the copies in the editor's and the
+   [crowd recorder](https://github.com/rulingAnts/crowd-recorder)'s `index.html`
+   (the shared engine only wires behavior onto it) — a markup change in one must
+   be made in all three.
 
 ## Deploy
 
